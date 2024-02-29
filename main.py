@@ -33,6 +33,12 @@ def save_file(window, text_field):
         with open(file_name, "w") as f:
             content = text_field.get(1.0, tk.END)
             f.write(content)
+
+def new_file(window, text_field):
+    global file_name
+    file_name = None
+    text_field.delete(1.0, tk.END)
+    window.title("Welcome to Simple.txt")
     
 
 def main():
@@ -51,9 +57,12 @@ def main():
     save_button.grid(column=0, row=0, sticky=("ew"))
     open_button = ttk.Button(frame, text="Open", command=lambda: open_file(window, text_field))
     open_button.grid(column=0, row=1, sticky=("ew"))
+    new_button = ttk.Button(frame, text="New", command= lambda: new_file(window, text_field))
+    new_button.grid(column=0, row=2, sticky=("ew"))
 
     window.bind("<Control-s>", lambda x: save_file(window, text_field))
     window.bind("<Control-o>", lambda x: open_file(window, text_field))
+    window.bind("<Control-n>", lambda x: new_file(window, text_field))
 
     window.mainloop()
 
