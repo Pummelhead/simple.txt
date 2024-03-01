@@ -39,6 +39,10 @@ def new_file(window, text_field):
     file_name = None
     text_field.delete(1.0, tk.END)
     window.title("Welcome to Simple.txt")
+
+def update_font_size(spinbox, text_field):
+    font_size = spinbox.get()
+    text_field.configure(font=("TkDefaultFont", font_size))
     
 
 def main():
@@ -50,7 +54,9 @@ def main():
     window.columnconfigure(1, weight=1)
     window.rowconfigure(0, weight=1)
 
-    text_field = Text(window, background="black", fg="white", insertbackground="white", wrap=WORD)
+    text_var = StringVar(window)
+    text_var.set("12")
+    text_field = Text(window, background="black", fg="white", insertbackground="white", wrap=WORD, font=("TkDefaultFont", 12))
     text_field.grid(column=1, row=0, sticky="nsew")
 
     save_button = ttk.Button(frame, text="Save", command=lambda: save_file(window, text_field))
@@ -59,10 +65,14 @@ def main():
     open_button.grid(column=0, row=1, sticky=("ew"))
     new_button = ttk.Button(frame, text="New", command= lambda: new_file(window, text_field))
     new_button.grid(column=0, row=2, sticky=("ew"))
+    font_size_selector = ttk.Spinbox(frame, from_=0, to=100, width=2, textvariable=text_var)
+    font_size_selector.grid(column=0, row=3, sticky=("ew"))
+    font_size_selector.config(command=lambda: update_font_size(font_size_selector, text_field))
 
     window.bind("<Control-s>", lambda x: save_file(window, text_field))
     window.bind("<Control-o>", lambda x: open_file(window, text_field))
     window.bind("<Control-n>", lambda x: new_file(window, text_field))
+    font_size_selector.bind("<Return>", lambda x: update_font_size(font_size_selector, text_field))
 
     window.mainloop()
 
